@@ -14,6 +14,10 @@ class Tile {
         ctx.drawImage(sprite, this.x * Config.tileWidth, this.y * Config.tileHeight);
     }
 
+    canBeFirst() {
+        return false;
+    }
+
     getNorth() {
         return this.map.getTileToNorth(this);
     }
@@ -30,6 +34,9 @@ class Tile {
         return this.map.getTileToWest(this);
     }
 
+    reveal() {
+        this.isExplored = true;
+    }
 }
 
 class Room extends Tile {
@@ -56,6 +63,26 @@ class Room extends Tile {
         this.hasBlood && this.drawSprite(ctx, Sprite.blood);
         this.hasBat && this.drawSprite(ctx, Sprite.bat)
     }
+
+    canBeFirst() {
+        if (this.isDeadly) {
+            return false;
+        }
+
+        if (this.hasBlood) {
+            return false;
+        }
+
+        if (this.hasSlime) {
+            return false;
+        }
+
+        if (this.hasBat) {
+            return false;
+        }
+
+        return true;
+    }
 }
 
 class Hall extends Tile {
@@ -72,6 +99,11 @@ class Hall extends Tile {
     draw(ctx, timeStamp) {
         this.leftSprite && this.isLeftExplored && this.drawSprite(ctx, this.leftSprite);
         this.rightSprite && this.isRightExplored && this.drawSprite(ctx, this.rightSprite);
+    }
+
+    reveal() {
+        this.isLeftExplored = true;
+        this.isRightExplored = true;
     }
 }
 
@@ -97,6 +129,7 @@ class Pit extends Room {
     constructor() {
         super();
 
+        this.isDeadly = true;
         this.leftSprite = Sprite.pit;
     }
 
@@ -113,6 +146,7 @@ class Lair extends Room {
     constructor() {
         super();
 
+        this.isDeadly = true;
         this.leftSprite = Sprite.room;
         this.rightSprite = Sprite.wumpus;
     }

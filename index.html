@@ -1,10 +1,13 @@
 <html>
     <head></head>
     <body>
-        <audio id="audio-move" src="./sounds/move.mp3" preload="auto"></audio>
-        <audio id="audio-block" src="./sounds/block.mp3" preload="auto"></audio>
-
-        <canvas id="canvas" width="640" height="480"></canvas>
+        <div style="width:640px">
+            <canvas id="canvas" width="640" height="480" style="border:1px solid black;"></canvas>
+            <p>Use arrow keys to move around. If you leave the field, you will wrap arround to the opposite side.</p>
+            <p>A red circle is blood and means that you are within at least moves of the wumpus.</p>
+            <p>Green walls are covered in slime and indicates that there is a pit one move away.</p>
+            <p>Hit Q to begin your attack when you believe you are next to the wumpus. To attack the wumpus use the arrow key in the direction that you believe it is in.</p>
+        </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="Config.js"></script>

@@ -15,14 +15,26 @@ class Player {
             return;
         }
 
+        var sprite = Sprite.player;
+
+        if (this.isAiming) {
+            sprite = Sprite.playerAim;
+        }
+
         if (this.side == Side.left) {
-            ctx.drawImage(Sprite.player, (this.x + 0.1) * Config.tileWidth, this.y * Config.tileHeight);
+            ctx.drawImage(sprite, (this.x + 0.1) * Config.tileWidth, this.y * Config.tileHeight);
         } else {
-            ctx.drawImage(Sprite.player, (this.x + 0.4) * Config.tileWidth, this.y * Config.tileHeight);
+            ctx.drawImage(sprite, (this.x + 0.4) * Config.tileWidth, this.y * Config.tileHeight);
         }
     }
 
     moveNorth() {
+        if (this.isAiming) {
+            var target = this.map.getRoomToNorth(this);
+            this.map.playerAttackTile(this, target);
+            return;
+        }
+
         var current = this.map.getTile(this.x, this.y);
         var next = this.map.getTileToNorth(this);
 
@@ -40,6 +52,12 @@ class Player {
     }
 
     moveSouth() {
+        if (this.isAiming) {
+            var target = this.map.getRoomToSouth(this);
+            this.map.playerAttackTile(this, target);
+            return;
+        }
+
         var current = this.map.getTile(this.x, this.y);
         var next = this.map.getTileToSouth(this);
 
@@ -57,6 +75,12 @@ class Player {
     }
 
     moveEast() {
+        if (this.isAiming) {
+            var target = this.map.getRoomToEast(this);
+            this.map.playerAttackTile(this, target);
+            return;
+        }
+
         var current = this.map.getTile(this.x, this.y);
         var next = this.map.getTileToEast(this);
 
@@ -73,6 +97,12 @@ class Player {
     }
 
     moveWest() {
+        if (this.isAiming) {
+            var target = this.map.getRoomToWest(this);
+            this.map.playerAttackTile(this, target);
+            return;
+        }
+
         var current = this.map.getTile(this.x, this.y);
         var next = this.map.getTileToWest(this);
 
@@ -88,4 +118,7 @@ class Player {
         }
     }
 
+    takeAim() {
+        this.isAiming = true;
+    }
 }

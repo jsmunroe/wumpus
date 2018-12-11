@@ -18,7 +18,7 @@ var Config = {
 }
 
 class Sprite { 
-    static loadImage(path) {
+    static load(path) {
         var image = new Image(80, 80);
         image.src = path;
     
@@ -26,20 +26,41 @@ class Sprite {
     }
 }
 
-Sprite.room = Sprite.loadImage('./images/room.png');
-Sprite.roomNE = Sprite.loadImage('./images/room.ne.png');
-Sprite.roomNW = Sprite.loadImage('./images/room.nw.png');
-Sprite.roomSE = Sprite.loadImage('./images/room.se.png');
-Sprite.roomSW = Sprite.loadImage('./images/room.sw.png');
-Sprite.pit = Sprite.loadImage('./images/pit.png');
-Sprite.wumpus = Sprite.loadImage('./images/wumpus.png');
-Sprite.blood = Sprite.loadImage('./images/blood.png');
-Sprite.bat = Sprite.loadImage('./images/bat.png');
-Sprite.slimyRoom = Sprite.loadImage('./images/room.slimy.png');
-Sprite.player = Sprite.loadImage('./images/player.png');
+Sprite.room = Sprite.load('./images/room.png');
+Sprite.roomNE = Sprite.load('./images/room.ne.png');
+Sprite.roomNW = Sprite.load('./images/room.nw.png');
+Sprite.roomSE = Sprite.load('./images/room.se.png');
+Sprite.roomSW = Sprite.load('./images/room.sw.png');
+Sprite.pit = Sprite.load('./images/pit.png');
+Sprite.wumpus = Sprite.load('./images/wumpus.png');
+Sprite.blood = Sprite.load('./images/blood.png');
+Sprite.bat = Sprite.load('./images/bat.png');
+Sprite.slimyRoom = Sprite.load('./images/room.slimy.png');
+Sprite.player = Sprite.load('./images/player.png');
+Sprite.playerAim = Sprite.load('./images/player.aim.png');
 
-var Sound = {
-    move: document.getElementById('audio-move'),
-    block: document.getElementById('audio-block'),
- };
+
+class Sound {
+    constructor(audio) {
+        this._audio = audio;
+    }
+
+    play() {
+        if (Sound.lastPlay) {
+            Sound.lastPlay.pause();
+            Sound.lastPlay.currentTime = 0.0;
+        }
+
+        this._audio.play();
+        Sound.lastPlay = this._audio;
+    }
+
+    static load(path) {
+        var audio = new Audio(path);
+        return new Sound(audio);
+    }
+}
+
+Sound.move = Sound.load('./sounds/move.mp3');
+Sound.block = Sound.load('./sounds/block.mp3');
 

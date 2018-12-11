@@ -13,7 +13,6 @@ function draw(timeStamp) {
 $(function(ex) {
     draw();
 
-
     document.addEventListener('keydown', event => {
         console.log(event.which);
 
@@ -25,6 +24,8 @@ $(function(ex) {
             map.player.moveEast();
         } else if (event.which == 40) { // Down
             map.player.moveSouth();
+        } else if (event.which == 81) { // q
+            map.player.takeAim();
         }
     })
 })

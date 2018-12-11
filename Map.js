@@ -15,18 +15,6 @@ class Map {
             }
         }
 
-        // Place player
-        var room = Randomizer.getRandom(this._tiles.filter(i => i instanceof Room || i instanceof Hall));
-
-        this.player = new Player();
-        this.player.map = this;
-
-        this.movePlayerToTile(this.player, room);
-        
-        if (room instanceof Hall) {
-            this.player.side = Randomizer.nextInt(1);
-        }
-
         // Pick pits
         for (var i = 0; i < Config.pitsInMap; i++) {
             var room = Randomizer.getRandom(this._tiles.filter(i => i instanceof Room || i instanceof Hall));
@@ -39,6 +27,18 @@ class Map {
             var room = Randomizer.getRandom(this._tiles.filter(i => i instanceof Room || i instanceof Hall));
 
             this.setLair(room.x, room.y)
+        }
+
+        // Place player
+        var room = Randomizer.getRandom(this._tiles.filter(i => (i instanceof Room || i instanceof Hall) && i.canBeFirst()));
+
+        this.player = new Player();
+        this.player.map = this;
+
+        this.movePlayerToTile(this.player, room);
+        
+        if (room instanceof Hall) {
+            this.player.side = Randomizer.nextInt(1);
         }
     }
 
@@ -211,6 +211,12 @@ class Map {
         return (y >= 0) ? y : y + this.height;
     }
 
+    reveal() {
+        for (var i = 0; i < this._tiles.length; i++) {
+            this._tiles[i].reveal();
+        }
+    }
+
     draw(ctx, timeStamp) {
         ctx.clearRect(0, 0, this.width * Config.tileWidth, this.height * Config.tileHeight);
         for (var i = 0; i < this._tiles.length; i++) {
@@ -240,6 +246,7 @@ class Map {
                 this.build();
             }, 50);
             player.isDead = true;
+            this.reveal();
             return false;
         }
 
@@ -249,10 +256,31 @@ class Map {
                 this.build();
             }, 50);
             player.isDead = true;
+            this.reveal();
             return false;
         }
 
         return true;
+    }
+
+    playerAttackTile(player, tile) {
+        if (tile instanceof Lair) {
+            setTimeout(() => {
+                alert('You got the wumpus!\n\nHooray!!');
+                this.build();
+            }, 50);
+            this.reveal();
+            return false;
+        }
+
+        setTimeout(() => {
+            alert('You have used your only arrow.\n\nThe hungry wumpus finds you unarmed!');
+            this.build();
+        }, 50);
+        player.isDead = true;
+        this.reveal();
+        return false;
+
     }
 
     getRandomTile() {
